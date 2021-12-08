@@ -25,9 +25,17 @@ length(which(mydata$result > 0))
 
 # Part A ANSWERED!!!!
 
+# reset variables
+rm(n)
+rm(y)
+rm(tempdata)
+rm(differ)
+
 # add a column that creates a rolling sum of 3 values
-for (n in 1:nrow(mydata)) {
+for (n in 3:10) {
   y <- n-1
   z <- n-2
-  
+  rolla <- mydata[n,1] + mydata[y,1] + mydata[z,1]
+  tempdata <- data.frame(valuea=mydata[n,1],rolling=rolla)
+  mydata <- rbind(mydata,tempdata)
 }
