@@ -30,12 +30,38 @@ rm(n)
 rm(y)
 rm(tempdata)
 rm(differ)
+rm(mydata)
 
-# add a column that creates a rolling sum of 3 values
-for (n in 3:10) {
+# start over making the added column a rolling sum of 3 values
+mydata <- data.frame(value=c(readings[1,1], readings[2,1]),rolling=c(NA,NA))
+for (n in 3:nrow(readings)) {
   y <- n-1
   z <- n-2
-  rolla <- mydata[n,1] + mydata[y,1] + mydata[z,1]
-  tempdata <- data.frame(valuea=mydata[n,1],rolling=rolla)
+  rolla <- readings[n,1] + readings[y,1] + readings[z,1]
+  tempdata <- data.frame(value=readings[n,1],rolling=rolla)
   mydata <- rbind(mydata,tempdata)
 }
+
+
+# reset variables
+rm(n)
+rm(y)
+rm(z)
+rm(tempdata)
+rm(rolla)
+
+# create another dataset that sets the first 3 rows
+mydata2 <- mydata[1:3,]
+mydata2$result <- c(NA,NA,NA)
+
+# now add the increase/decrease column
+for (n in 4:nrow(mydata)) {
+  y <- n-1
+  z <- n-2
+  differ <- mydata[n,2] - mydata[y,2]
+  tempdata <- data.frame(value=mydata[n,1],rolling=mydata[n,2],result=differ)
+  mydata2 <- rbind(mydata2,tempdata)
+}
+
+# count the increases
+length(which(mydata2$result > 0))
